@@ -2,18 +2,18 @@
   "name": "personal-blog",
   "version": "1.0.0",
   "description": "a personal blog where you can write and publish articles.",
-  "main": "index.js",
+  "main": "./blog/server.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "test": "node --watch index.js"
+    "start": "node ./blog/server.js",
+    "test": "node --watch ./blog/server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/1MhDjant23/Personal-Blog.git"
   },
   "keywords": [],
-  "author": "Mohamed Ait Tajante",
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/1MhDjant23/Personal-Blog/issues"
