@@ -2,6 +2,7 @@ import { __dirname } from '../server.js';
 import url from 'node:url';
 import loadTemplate from './loadTemplate.js';
 import renderTemplate from './renderTemplate.js';
+import { getArticle } from '../data/getData.js';
 
 export default async function handler(request, response) {
     const {url: reqUrl, method} = request;
@@ -26,14 +27,14 @@ async	function	guestRoutesHandler(path, method, response) {
 	let	isHandled = false;
 
 	if (method === 'GET' && path === '/') {
-		const	template = await loadTemplate('' ,'home');
+		const	template = await loadTemplate('' ,'home.html');
 		if(template !== null) {
 			renderTemplate(template, {});
 			console.log('GET / no null');
 			// console.log(template);
 			/**
 			 * renderTameplate logic here.
-			 */
+			*/
 			response.write(template);
 			response.end();
 		} else {
@@ -47,8 +48,12 @@ async	function	guestRoutesHandler(path, method, response) {
 	}
 	else if (method === 'GET' && path === '/article')
 	{
-		const	template = await loadTemplate('', 'articles');
+		let	template = await loadTemplate('', 'articles');
 		if (template !== null) {
+			// const	data = await loadTemplate('data', 'articles');
+			//  data = JSON.parse(data);
+			const	articles = await getArticle();
+			template = renderTemplate(template, articles[1]);
 			response.write(template);
 			response.end();
 		} else {

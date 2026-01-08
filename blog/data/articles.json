@@ -1,0 +1,12 @@
+[
+  {
+    "title": "JavaScript Basics",
+    "date": "2024-06-01",
+    "article": "Learn the fundamentals of JavaScript, including variables, functions, and control flow."
+  },
+  {
+    "title": "Async Programming in Node.js",
+    "date": "2024-06-05",
+    "article": "Discover how to handle asynchronous operations in Node.js using callbacks, promises, and async/await."
+  }
+]
