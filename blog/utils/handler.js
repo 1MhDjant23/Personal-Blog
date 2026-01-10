@@ -1,62 +1,68 @@
 import { __dirname } from '../server.js';
-import url from 'node:url';
 import loadTemplate from './loadTemplate.js';
 import renderTemplate from './renderTemplate.js';
 import { getArticle } from '../data/getData.js';
+import { getHomeData } from '../data/getData.js';
 
 export default async function handler(request, response) {
-    const {url: reqUrl, method} = request;
-    const parsedUrl = url.parse(reqUrl, true);
+		const	resolveUrl = new URL(request.url, `http://${request.headers.host}`);
+    const { method } = request;
 
-    const pathname = parsedUrl.pathname;
-		let	isHanded = await guestRoutesHandler(pathname, method, response);
+		console.log("id: --> ", resolveUrl.searchParams.get('id')); 
+
+		let	isHanded = await guestRoutesHandler(resolveUrl, method, response);
 		if (!isHanded)
-			isHanded = adminRoutesHandler(pathname, method, response);
+			isHanded = adminRoutesHandler(resolveUrl, method, response);
 		if (!isHanded) {
-			response.end('404 Not Found');
+			response.end('404 Not Found'); 
 			console.error('404 Not Found');
 		}
-
-		console.log(`DIR: ${__dirname}`);
-    console.log(`URL: ${reqUrl}`);
-    console.log(`PATH: ${parsedUrl.pathname}`);
-    console.log(`METHOD: ${method}`);
 }
 
-async	function	guestRoutesHandler(path, method, response) {
+async	function	guestRoutesHandler(resolveUrl, method, response) {
 	let	isHandled = false;
 
-	if (method === 'GET' && path === '/') {
-		const	template = await loadTemplate('' ,'home.html');
-		if(template !== null) {
-			renderTemplate(template, {});
-			console.log('GET / no null');
-			// console.log(template);
-			/**
-			 * renderTameplate logic here.
-			*/
-			response.write(template);
-			response.end();
-		} else {
-			console.log('GET error');
+	if (method === 'GET' && resolveUrl.pathname === '/') {
+		let	template = await loadTemplate('home');
+		if(template !== null)
+		{
+				const dataObj = await getHomeData();
+				template = await renderTemplate(template, dataObj);
+				// console.log(template);
+				response.write(template);
+				response.end();
+
+		}
+		else
+		{
 			response.writeHead(500, {
 				'content-type': 'text/html'
 			});
-			response.write(template);
+			response.end('Home Internal Server Error');
 		}
 		isHandled = true;
 	}
-	else if (method === 'GET' && path === '/article')
+	else if ( method === 'GET'
+				&&  resolveUrl.pathname === '/article'
+				&&  resolveUrl.searchParams.has('id')
+				&& 	resolveUrl.searchParams.size === 1 )
 	{
-		let	template = await loadTemplate('', 'articles');
-		if (template !== null) {
-			// const	data = await loadTemplate('data', 'articles');
-			//  data = JSON.parse(data);
-			const	articles = await getArticle();
-			template = renderTemplate(template, articles[1]);
-			response.write(template);
-			response.end();
-		} else {
+		let	template = await loadTemplate('articles');
+		if (template !== null) 
+		{
+				const	articleId = resolveUrl.searchParams.get('id');
+				const	article = await getArticle(articleId);
+				
+				if (!Number.isSafeInteger(Number(articleId)) || Object.keys(article).length === 0) {
+					response.writeHead(404, { 'Content-Type': 'text/html' });
+					response.end('Article Not Found');
+				} else {
+					template = await renderTemplate(template, article);
+					response.writeHead(200, { 'Content-Type': 'text/html' });
+					response.end(template);
+				}
+		}
+		else {
 			response.writeHead(500, {
 				'content-type': 'text/html'
 			});
@@ -66,6 +72,25 @@ async	function	guestRoutesHandler(path, method, response) {
 	}
 	return isHandled;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function	adminRoutesHandler(path, method, response) {
 	let	isHandled = false;

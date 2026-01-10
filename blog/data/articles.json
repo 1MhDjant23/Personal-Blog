@@ -1,12 +1,38 @@
 [
   {
+    "id": 1,
     "title": "JavaScript Basics",
     "date": "2024-06-01",
     "article": "Learn the fundamentals of JavaScript, including variables, functions, and control flow."
   },
   {
+    "id": 2,
     "title": "Async Programming in Node.js",
     "date": "2024-06-05",
     "article": "Discover how to handle asynchronous operations in Node.js using callbacks, promises, and async/await."
+  },
+  {
+    "id": 3,
+    "title": "Understanding Closures in JavaScript",
+    "date": "2024-06-10",
+    "article": "Explore closures in JavaScript, how they work, and practical use cases for encapsulation and data privacy."
+  },
+  {
+    "id": 4,
+    "title": "Mastering Array Methods",
+    "date": "2024-06-12",
+    "article": "A deep dive into JavaScript array methods like map, filter, reduce, and forEach with practical examples."
+  },
+  {
+    "id": 5,
+    "title": "Introduction to Express.js",
+    "date": "2024-06-15",
+    "article": "Get started with Express.js, the popular Node.js web framework, and build your first REST API."
+  },
+  {
+    "id": 6,
+    "title": "Promises vs. Async/Await",
+    "date": "2024-06-18",
+    "article": "Compare JavaScript promises and async/await syntax, and learn when to use each for asynchronous code."
   }
 ]
