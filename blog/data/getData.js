@@ -1,7 +1,7 @@
 import fs from  'node:fs/promises';
 import path from 'node:path';
 import { __dirname } from '../server.js';
-import { type } from 'node:os';
+// import { type } from 'node:os';
 /**
  * 
  * @param {*} articleId 
@@ -41,4 +41,27 @@ async function  getHomeData() {
   }
 }
 
-export { getArticle, getHomeData };
+/**
+ * 
+ * @returns admin info as {}
+ */
+async function getAdminData() {
+  const filePath = path.resolve(__dirname, 'data', 'admin.json');
+  
+  try {
+    const content = await fs.readFile(filePath, 'utf-8');
+    if (!content.trim()) return null;
+    const data = JSON.parse(content);
+    return data ? data : null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export 
+{ 
+    getArticle,
+    getHomeData,
+    getAdminData
+};
